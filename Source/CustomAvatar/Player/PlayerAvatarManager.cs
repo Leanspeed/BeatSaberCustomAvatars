@@ -99,6 +99,8 @@ namespace CustomAvatar.Player
             Object.Destroy(_avatarContainer);
 
             _settings.moveFloorWithRoomAdjustChanged -= OnMoveFloorWithRoomAdjustChanged;
+            _settings.firstPersonEnabledChanged -= OnFirstPersonEnabledChanged;
+            _floorController.floorPositionChanged -= OnFloorPositionChanged;
             BeatSaberEvents.playerHeightChanged -= OnPlayerHeightChanged;
 
             SaveAvatarInfosToFile();
