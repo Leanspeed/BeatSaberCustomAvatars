@@ -66,7 +66,7 @@ namespace CustomAvatar.Player
 
         private string _switchingToPath;
         private Settings.AvatarSpecificSettings _currentAvatarSettings;
-        private Transform _avatarContainer;
+        private GameObject _avatarContainer;
 
         [Inject]
         private PlayerAvatarManager(DiContainer container, ILoggerProvider loggerProvider, AvatarLoader avatarLoader, Settings settings, AvatarSpawner spawner, BeatSaberUtilities beatSaberUtilities, FloorController floorController)
@@ -87,7 +87,7 @@ namespace CustomAvatar.Player
             _floorController.floorPositionChanged += OnFloorPositionChanged;
             BeatSaberEvents.playerHeightChanged += OnPlayerHeightChanged;
 
-            _avatarContainer = new GameObject("Avatar Container").transform;
+            _avatarContainer = new GameObject("Avatar Container");
             Object.DontDestroyOnLoad(_avatarContainer);
 
             LoadAvatarInfosFromFile();
@@ -96,7 +96,7 @@ namespace CustomAvatar.Player
 
         public void Dispose()
         {
-            Object.Destroy(_avatarContainer.gameObject);
+            Object.Destroy(_avatarContainer);
 
             _settings.moveFloorWithRoomAdjustChanged -= OnMoveFloorWithRoomAdjustChanged;
             BeatSaberEvents.playerHeightChanged -= OnPlayerHeightChanged;
@@ -206,7 +206,7 @@ namespace CustomAvatar.Player
                 _avatarInfos.Add(avatarInfo.fileName, avatarInfo);
             }
 
-            currentlySpawnedAvatar = _spawner.SpawnAvatar(avatar, _container.Instantiate<VRPlayerInput>(), _avatarContainer);
+            currentlySpawnedAvatar = _spawner.SpawnAvatar(avatar, _container.Instantiate<VRPlayerInput>(), _avatarContainer.transform);
             _currentAvatarSettings = _settings.GetAvatarSettings(avatar.fileName);
 
             ResizeCurrentAvatar();
@@ -360,7 +360,7 @@ namespace CustomAvatar.Player
 
         private void SetAvatarVerticalPosition(float verticalPosition)
         {
-            _avatarContainer.position = new Vector3(0, verticalPosition, 0);
+            _avatarContainer.transform.position = new Vector3(0, verticalPosition, 0);
         }
 
         private List<string> GetAvatarFileNames()
