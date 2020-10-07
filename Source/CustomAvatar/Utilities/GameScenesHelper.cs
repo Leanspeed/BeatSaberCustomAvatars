@@ -19,7 +19,7 @@ using Zenject;
 
 namespace CustomAvatar.Utilities
 {
-    internal class GameScenesHelper
+    internal class GameScenesHelper : IInitializable, IDisposable
     {
         public event Action<BeatSaberScene, DiContainer> transitionDidFinish;
 
@@ -28,8 +28,16 @@ namespace CustomAvatar.Utilities
         public GameScenesHelper(GameScenesManager gameScenesManager)
         {
             _gameScenesManager = gameScenesManager;
+        }
 
+        public void Initialize()
+        {
             _gameScenesManager.transitionDidFinishEvent += OnTransitionDidFinish;
+        }
+
+        public void Dispose()
+        {
+            _gameScenesManager.transitionDidFinishEvent -= OnTransitionDidFinish;
         }
 
         public BeatSaberScene GetCurrentScene()
